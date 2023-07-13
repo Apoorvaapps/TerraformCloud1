@@ -5,17 +5,17 @@ variable "instance_count" {
 }
 
 variable "subnet_prefix" {
-  type = "list"
-  default = [
-    {
-      ip      = "10.0.1.0/24"
-      name     = "subnet-1"
-    },
-    {
-      ip      = "10.0.2.0/24"
+  type = map(any)
+  default = {
+    subnet_1 = {
+      ip      = ["10.0.1.0/24"]
+      name    = "subnet-1"
+    } 
+    subnet_2 = {
+      ip      = ["10.0.2.0/24"]
       name     = "subnet-2"
     }
-   ]
+    }
 }
 
 variable "admin_username" {

@@ -33,12 +33,11 @@ resource "azurerm_network_security_group" "default" {
 # Create subnet
 
 resource "azurerm_subnet" "default" {
-  count                = "${length(var.subnet_prefix)}"
-  name                 = "SubnetTest-${count.index + 1}"
+  for_each             = var.subnet_prefix
+  name                 = each.value["name"]
   virtual_network_name = azurerm_virtual_network.default.name
   resource_group_name  = azurerm_resource_group.default.name
-  address_prefix       = "${lookup(element(var.subnet_prefix, count.index), "ip")}"
-  address_prefixes     = ["10.0.2.0/24"]
+  address_prefixes     = each.value["ip"]
   service_endpoints    = ["Microsoft.Storage"]
 
   delegation {
@@ -55,7 +54,8 @@ resource "azurerm_subnet" "default" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "default" {
-  subnet_id                 = azurerm_subnet.default.id
+  for_each                  = var.subnet_prefix
+  subnet_id                 = azurerm_subnet.default[each.key].id
   network_security_group_id = azurerm_network_security_group.default.id
 }
 
@@ -74,11 +74,12 @@ resource "azurerm_private_dns_zone_virtual_network_link" "default" {
 }
 
 resource "azurerm_postgresql_flexible_server" "default" {
+  for_each               = var.subnet_prefix
   name                   = "test897-server"
   resource_group_name    = azurerm_resource_group.default.name
   location               = azurerm_resource_group.default.location
   version                = "13"
-  delegated_subnet_id    = azurerm_subnet.default.id
+  delegated_subnet_id    = azurerm_subnet.default[each.key].id
   private_dns_zone_id    = azurerm_private_dns_zone.default.id
   administrator_login    = var.admin_username
   administrator_password = var.admin_password
@@ -96,11 +97,42 @@ resource "azurerm_public_ip" "default" {
   resource_group_name = azurerm_resource_group.default.name
   allocation_method   = "Dynamic"
 }
+# Network Interface 
+resource "azurerm_network_interface" "default" {
+  for_each            = var.subnet_prefix
+  name                = "myNIC"
+  location            = azurerm_resource_group.default.location
+  resource_group_name = azurerm_resource_group.default.name
 
+  ip_configuration {
+    name                          = "my_nic_configuration"
+    subnet_id                     = azurerm_subnet.default[each.key].id
+    private_ip_address_allocation = "Dynamic"
+    #public_ip_address_id         = azurerm_public_ip.my_terraform_public_ip.id
+    
+  }
+}
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "default" {
+  for_each              = var.subnet_prefix
   name                  = "VMTest"
   location              = azurerm_resource_group.default.location
   resource_group_name   = azurerm_resource_group.default.name
+  network_interface_ids = [azurerm_network_interface.default[each.key].id]
   size                  = "Standard_DS1_v2"
+  os_disk {
+    name                 = "myOsDisk"
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts-gen2"
+    version   = "latest"
+  }
+  computer_name                   = "myvm"
+  admin_username                  = "azureuser"
+  admin_password                  = "password@768954"
+  disable_password_authentication = false
 }
