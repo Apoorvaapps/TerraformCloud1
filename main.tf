@@ -53,10 +53,10 @@ resource "azurerm_subnet" "default" {
   }
 }
 
-/* resource "azurerm_subnet_network_security_group_association" "default" {
-  subnet_id                 = azurerm_subnet.default[subnet-1].id
+resource "azurerm_subnet_network_security_group_association" "default" {
+  subnet_id                 = azurerm_subnet.default.*.id[1]
   network_security_group_id = azurerm_network_security_group.default.id
-} */
+} 
 
 resource "azurerm_private_dns_zone" "default" {
   name                = "test897-pdz.postgres.database.azure.com"
@@ -103,7 +103,7 @@ resource "azurerm_network_interface" "default" {
 
   ip_configuration {
     name                          = "my_nic_configuration"
-    subnet_id                     = azurerm_subnet.default.id[0]
+    subnet_id                     = azurerm_subnet.default.*.id[1]
     private_ip_address_allocation = "Dynamic"
     #public_ip_address_id         = azurerm_public_ip.my_terraform_public_ip.id
     
