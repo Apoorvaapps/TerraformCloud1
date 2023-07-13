@@ -54,7 +54,7 @@ resource "azurerm_subnet" "default" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "default" {
-  subnet_id                 = azurerm_subnet.default.name["subnet-1"].id
+  subnet_id                 = azurerm_subnet.default.id["1"].id
   network_security_group_id = azurerm_network_security_group.default.id
 } 
 
