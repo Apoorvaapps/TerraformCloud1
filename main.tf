@@ -54,8 +54,7 @@ resource "azurerm_subnet" "default" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "default" {
-  for_each                  = var.subnet_prefix
-  subnet_id                 = azurerm_subnet.default[each.key].id
+  subnet_id                 = azurerm_subnet.default[0].id
   network_security_group_id = azurerm_network_security_group.default.id
 }
 
@@ -74,12 +73,11 @@ resource "azurerm_private_dns_zone_virtual_network_link" "default" {
 }
 
 resource "azurerm_postgresql_flexible_server" "default" {
-  for_each               = var.subnet_prefix
   name                   = "test897-server"
   resource_group_name    = azurerm_resource_group.default.name
   location               = azurerm_resource_group.default.location
   version                = "13"
-  delegated_subnet_id    = azurerm_subnet.default[each.key].id
+  delegated_subnet_id    = azurerm_subnet.default[0].id
   private_dns_zone_id    = azurerm_private_dns_zone.default.id
   administrator_login    = var.admin_username
   administrator_password = var.admin_password
@@ -99,14 +97,13 @@ resource "azurerm_public_ip" "default" {
 }
 # Network Interface 
 resource "azurerm_network_interface" "default" {
-  for_each            = var.subnet_prefix
   name                = "myNIC"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
 
   ip_configuration {
     name                          = "my_nic_configuration"
-    subnet_id                     = azurerm_subnet.default[each.key].id
+    subnet_id                     = azurerm_subnet.default[0].id
     private_ip_address_allocation = "Dynamic"
     #public_ip_address_id         = azurerm_public_ip.my_terraform_public_ip.id
     
@@ -114,11 +111,10 @@ resource "azurerm_network_interface" "default" {
 }
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "default" {
-  for_each              = var.subnet_prefix
   name                  = "VMTest"
   location              = azurerm_resource_group.default.location
   resource_group_name   = azurerm_resource_group.default.name
-  network_interface_ids = [azurerm_network_interface.default[each.key].id]
+  network_interface_ids = [azurerm_network_interface.default.id]
   size                  = "Standard_DS1_v2"
   os_disk {
     name                 = "myOsDisk"
