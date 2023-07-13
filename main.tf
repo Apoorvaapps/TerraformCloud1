@@ -54,7 +54,7 @@ resource "azurerm_subnet" "default" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "default" {
-  subnet_id                 = azurerm_subnet.default.*.id[1]
+  subnet_id                 = azurerm_subnet.default.*.id[0]
   network_security_group_id = azurerm_network_security_group.default.id
 } 
 
@@ -103,7 +103,7 @@ resource "azurerm_network_interface" "default" {
 
   ip_configuration {
     name                          = "my_nic_configuration"
-    subnet_id                     = azurerm_subnet.default.*.id[1]
+    subnet_id                     = azurerm_subnet.default.*.id[0]
     private_ip_address_allocation = "Dynamic"
     #public_ip_address_id         = azurerm_public_ip.my_terraform_public_ip.id
     
