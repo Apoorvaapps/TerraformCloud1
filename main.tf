@@ -54,7 +54,6 @@ resource "azurerm_subnet" "default" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "default" {
-  for_each                  = var.subnet_prefix
   subnet_id                 = azurerm_subnet.default["subnet_1"].id
   network_security_group_id = azurerm_network_security_group.default.id
 } 
@@ -112,7 +111,6 @@ resource "azurerm_network_interface" "default" {
 }
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "default" {
-  for_each              = var.subnet_prefix
   name                  = "VMTest"
   location              = azurerm_resource_group.default.location
   resource_group_name   = azurerm_resource_group.default.name
