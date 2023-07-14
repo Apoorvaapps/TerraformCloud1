@@ -15,7 +15,7 @@ variable "subnet_prefix" {
     subnet_2 = {
       ip                 = ["10.0.2.0/24"]
       name               = "subnet-2"
-      service_delegation = false
+      service_delegation = true
     }
     }
 }
