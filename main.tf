@@ -91,7 +91,7 @@ resource "azurerm_postgresql_flexible_server" "default" {
   resource_group_name    = azurerm_resource_group.default.name
   location               = azurerm_resource_group.default.location
   version                = "13"
-  delegated_subnet_id    = azurerm_subnet.default["subnet-1"].id
+  #delegated_subnet_id    = azurerm_subnet.default["subnet-1"].id
   private_dns_zone_id    = azurerm_private_dns_zone.default.id
   administrator_login    = var.admin_username
   administrator_password = var.admin_password
