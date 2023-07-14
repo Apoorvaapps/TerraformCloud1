@@ -50,7 +50,7 @@ resource "azurerm_subnet" "default" {
       name = ["Microsoft.DBforPostgreSQL/flexibleServers" , "Microsoft.Network/networkInterfaces"]
 
       actions = [
-        "Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/networkInterfaces/join/action"
+        "Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/networkInterfaces/join/action" ,
       ]
       }
     }
