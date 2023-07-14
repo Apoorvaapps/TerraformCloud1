@@ -73,7 +73,7 @@ resource "azurerm_subnet" "default" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "default" {
-  subnet_id                 = azurerm_subnet.default["subnet_1"].id
+  subnet_id                 = azurerm_subnet.default["subnet-1"].id
   network_security_group_id = azurerm_network_security_group.default.id
 } 
 
@@ -96,7 +96,7 @@ resource "azurerm_postgresql_flexible_server" "default" {
   resource_group_name    = azurerm_resource_group.default.name
   location               = azurerm_resource_group.default.location
   version                = "13"
-  delegated_subnet_id    = azurerm_subnet.default["subnet_1"].id
+  delegated_subnet_id    = azurerm_subnet.default["subnet-1"].id
   private_dns_zone_id    = azurerm_private_dns_zone.default.id
   administrator_login    = var.admin_username
   administrator_password = var.admin_password
@@ -122,7 +122,7 @@ resource "azurerm_network_interface" "default" {
 
   ip_configuration {
     name                          = "my_nic_configuration"
-    subnet_id                     = azurerm_subnet.default["subnet_2"].id
+    subnet_id                     = azurerm_subnet.default["subnet-1"].id
     private_ip_address_allocation = "Dynamic"
     #public_ip_address_id         = azurerm_public_ip.my_terraform_public_ip.id
     
