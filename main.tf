@@ -42,16 +42,11 @@ resource "azurerm_subnet" "default" {
   
   dynamic "delegation" {
       for_each = each.value.service_delegation == "true" ? [1] : []
-        
       content {
-      name = "delegation"
-
-      service_delegation {
-      name = "Microsoft.DBforPostgreSQL/flexibleServers"
-
-      actions = [
-        "Microsoft.Network/virtualNetworks/subnets/join/action", 
-      ]
+        name = "delegation"
+        service_delegation {
+          name = "Microsoft.DBforPostgreSQL/flexibleServers"
+          actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", ]
       }
     }
   }
