@@ -9,13 +9,13 @@ variable "subnet_prefix" {
   default = {
     subnet-1 = {
       ip                 = ["10.0.1.0/24"]
-      name               = "subnet-1"
       service_delegation = true
+      name               = "subnet-1"
     } 
     subnet-2 = {
       ip                 = ["10.0.2.0/24"]
-      name               = "subnet-2"
       service_delegation = false
+      name               = "subnet-2"
     }
    }
 }
