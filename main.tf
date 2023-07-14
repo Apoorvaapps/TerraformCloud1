@@ -103,7 +103,7 @@ resource "azurerm_network_interface" "default" {
 
   ip_configuration {
     name                          = "my_nic_configuration"
-    subnet_id                     = azurerm_subnet.default["subnet_1"].id
+    subnet_id                     = azurerm_subnet.default["subnet_2"].id
     private_ip_address_allocation = "Dynamic"
     #public_ip_address_id         = azurerm_public_ip.my_terraform_public_ip.id
     
