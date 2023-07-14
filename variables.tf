@@ -17,7 +17,7 @@ variable "subnet_prefix" {
       name               = "subnet-2"
       service_delegation = false
     }
-    }
+   }
 }
 
 variable "admin_username" {
