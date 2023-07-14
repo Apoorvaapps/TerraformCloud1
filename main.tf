@@ -55,7 +55,7 @@ resource "azurerm_subnet" "default" {
       }
     }
   }
-  dynamic "delegation" {
+  /* dynamic "delegation" {
       for_each = each.value.service_delegation == "true" ? [1] : []
         
       content {
@@ -69,7 +69,7 @@ resource "azurerm_subnet" "default" {
       ]
       }
     }
-  }
+  } */
 }
 
 resource "azurerm_subnet_network_security_group_association" "default" {
