@@ -78,7 +78,7 @@ resource "azurerm_postgresql_flexible_server" "default" {
   resource_group_name    = azurerm_resource_group.default.name
   location               = azurerm_resource_group.default.location
   version                = "13"
-  delegated_subnet_id    = azurerm_subnet.default[0].id
+  delegated_subnet_id    = azurerm_subnet.default["subnet_1"].id
   private_dns_zone_id    = azurerm_private_dns_zone.default.id
   administrator_login    = var.admin_username
   administrator_password = var.admin_password
@@ -98,7 +98,6 @@ resource "azurerm_public_ip" "default" {
 }
 # Network Interface 
 resource "azurerm_network_interface" "default" {
-  for_each            = var.subnet_prefix
   name                = "myNIC"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
@@ -117,7 +116,7 @@ resource "azurerm_linux_virtual_machine" "default" {
   name                  = "VMTest"
   location              = azurerm_resource_group.default.location
   resource_group_name   = azurerm_resource_group.default.name
-  network_interface_ids = [azurerm_network_interface.default[each.key]["1"].id]
+  network_interface_ids = [azurerm_network_interface.default.id]
   size                  = "Standard_DS1_v2"
   os_disk {
     name                 = "myOsDisk"
