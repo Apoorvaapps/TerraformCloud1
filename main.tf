@@ -41,13 +41,13 @@ resource "azurerm_subnet" "default" {
   service_endpoints    = ["Microsoft.Storage"]
   
   dynamic "delegation" {
-      for_each = each.value.service_delegation == "true" ? [1] : []
+      for_each = each.value.service_prefix == "true" ? [1] : []
         
       content {
       name = "delegation"
 
       service_delegation {
-      name = ["Microsoft.DBforPostgreSQL/flexibleServers", "Microsoft.Network/networkInterfaces"]
+      name = ["Microsoft.DBforPostgreSQL/flexibleServers" , "Microsoft.Network/networkInterfaces"]
 
       actions = [
         "Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/networkInterfaces/join/action"
