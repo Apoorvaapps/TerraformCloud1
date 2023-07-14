@@ -8,12 +8,14 @@ variable "subnet_prefix" {
   type = map(any)
   default = {
     subnet_1 = {
-      ip      = ["10.0.1.0/24"]
-      name    = "subnet-1"
+      ip                 = ["10.0.1.0/24"]
+      name               = "subnet-1"
+      service_delegation = true
     } 
     subnet_2 = {
-      ip      = ["10.0.2.0/24"]
-      name     = "subnet-2"
+      ip                 = ["10.0.2.0/24"]
+      name               = "subnet-2"
+      service_delegation = false
     }
     }
 }
